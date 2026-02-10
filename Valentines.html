@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Valentine’s Day ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+    --bg1: #ff9a9e;
+    --bg2: #fad0c4;
+    --card: white;
+    --text: #444;
+}
+
+body.dark {
+    --bg1: #1f1f2e;
+    --bg2: #3a3a55;
+    --card: #2b2b3d;
+    --text: #eee;
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', Arial, sans-serif;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 10;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+}
+
+.hidden { display: none; }
+
+.loader {
+    font-size: 22px;
+    color: white;
+    animation: pulse 1.5s infinite;
+}
+
+/* PIN */
+.pin-box {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    width: 260px;
+}
+
+.pin-box input {
+    font-size: 18px;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.pin-box button {
+    margin-top: 15px;
+    padding: 10px;
+    border: none;
+    background: #e63946;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+/* CARD */
+.card {
+    background: var(--card);
+    color: var(--text);
+    width: 90%;
+    max-width: 420px;
+    padding: 25px;
+    border-radius: 22px;
+    text-align: center;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+    animation: fadeIn 1.2s ease;
+    z-index: 2;
+}
+
+h1 { color: #e63946; }
+h2 { font-size: 18px; }
+
+.photo {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 4px solid #e63946;
+    object-fit: cover;
+    margin: 10px auto;
+}
+
+.heart-main {
+    font-size: 60px;
+    animation: heartbeat 1.4s infinite;
+}
+
+.buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    position: relative;
+}
+
+button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 30px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.yes { background: #e63946; color: white; }
+
+.no {
+    background: #aaa;
+    color: white;
+    position: absolute;
+    right: 0;
+    pointer-events: auto;
+}
+
+/* Love letter */
+.letter-btn {
+    margin-top: 15px;
+    background: transparent;
+    border: 2px dashed #e63946;
+    color: #e63946;
+}
+
+.love-letter {
+    margin-top: 15px;
+    padding: 15px;
+    background: #fff0f3;
+    border-radius: 15px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #b5172f;
+}
+
+.toggle {
+    margin-top: 10px;
+    font-size: 13px;
+    cursor: pointer;
+    color: #888;
+}
+
+/* Particles */
+.particle {
+    position: absolute;
+    bottom: -20px;
+    font-size: 22px;
+    animation: floatUp 6s linear forwards;
+    z-index: 1;
+}
+
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-110vh); opacity: 0; }
+}
+
+@keyframes pulse {
+    0% { opacity: .5; }
+    50% { opacity: 1; }
+    100% { opacity: .5; }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" loop>
+    <source src="dionela.mp3" type="audio/mpeg">
+</audio>
+
+<div class="screen" id="loading">
+    <div class="loader">💖 Preparing your surprise…</div>
+</div>
+
+<div class="screen hidden" id="pinScreen">
+    <div class="pin-box">
+        <h3>🔐 Enter the secret PIN</h3>
+        <input type="password" id="pinInput" placeholder="****">
+        <button onclick="checkPin()">Unlock 💘</button>
+        <p id="pinError" style="color:red;display:none;">Wrong PIN 😢</p>
+    </div>
+</div>
+
+<div class="card hidden" id="main">
+    <h1>Happy Valentine’s Day ❤️</h1>
+    <h2>For my Adiii na badlongon</h2>
+
+    <img src="photo.jpeg" class="photo">
+
+    <div class="heart-main">💖</div>
+
+    <p>You are my happiness, my comfort, my favortie enemy and my favorite person. 💕</p>
+
+    <p><strong>Will you be my Valentine?</strong></p>
+
+    <div class="buttons">
+        <button class="yes" onclick="yesClicked()">Yes 💘</button>
+        <button class="no" id="noBtn">No 😢</button>
+    </div>
+
+    <button class="letter-btn" onclick="toggleLetter()">💌 Read my love letter here</button>
+
+    <div class="love-letter hidden" id="loveLetter">
+        My kamahalan, <br><br>
+        First of all happy Valentine's day bayot na palaaway HAHAHAHA
+        Kabalo baka nga ikaw akong kusog, kalipay, kalagot, kaaway, kauban, asawa, tropa, kauban manglibak, kauban mangaway? HAHAHAHAHA iloveyousomuch kaayo gwapa kiss ko bi HAHAHAHAHA
+        kabalo ka adi bisag sge kag pangaway? love gyapon kaayo tka kay at baket? at baket hndi duhh bayot iloveyousomuch mwaaaa HAHAHAHAhah
+        kani ra gyud intawn akong maregalo sa imo adiiii iloveyousomuch mwaaaa❤️
+    </div>
+
+    <div class="toggle" onclick="toggleDark()">🌙 Toggle Night Mode</div>
+</div>
+
+<script>
+const CORRECT_PIN = "0214";
+const music = document.getElementById("music");
+
+let particleType = "heart";
+
+/* Loading */
+setTimeout(() => {
+    loading.classList.add("hidden");
+    pinScreen.classList.remove("hidden");
+}, 2500);
+
+/* PIN */
+function checkPin() {
+    if (pinInput.value === CORRECT_PIN) {
+        pinScreen.classList.add("hidden");
+        main.classList.remove("hidden");
+        startParticles();
+    } else {
+        pinError.style.display = "block";
+    }
+}
+
+/* Particles */
+function startParticles() {
+    setInterval(() => {
+        const p = document.createElement("div");
+        p.className = "particle";
+        p.innerHTML = particleType === "heart" ? "❤️" : "🎆";
+        p.style.left = Math.random() * 100 + "vw";
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 6000);
+    }, 400);
+}
+
+/* YES */
+function yesClicked() {
+    music.play();
+    particleType = "firework";
+}
+
+/* NO — impossible */
+const noBtn = document.getElementById("noBtn");
+["mouseover","touchstart","focus","click"].forEach(e =>
+    noBtn.addEventListener(e, evade)
+);
+
+function evade(e) {
+    e.preventDefault();
+    noBtn.style.transform =
+        `translate(${Math.random()*180-90}px,${Math.random()*180-90}px)`;
+}
+
+/* Love letter */
+function toggleLetter() {
+    loveLetter.classList.toggle("hidden");
+}
+
+/* Dark mode */
+function toggleDark() {
+    document.body.classList.toggle("dark");
+}
+</script>
+
+</body>
+</html>
